@@ -1,24 +1,26 @@
 const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db'); // ✅ import the Sequelize instance
+const User = require('./User'); // assuming you have a User model
 
 const RefreshToken = sequelize.define('RefreshToken', {
   token: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
+    unique: true,
   },
   expiresAt: {
     type: DataTypes.DATE,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 }, {
   tableName: 'refresh_tokens',
-  timestamps: true  // auto adds createdAt, updatedAt
+  timestamps: true, // adds createdAt, updatedAt
 });
 
-// Association: RefreshToken belongs to a User
+// Associate with User
 RefreshToken.belongsTo(User, {
   foreignKey: 'userId',
-  onDelete: 'CASCADE'
+  onDelete: 'CASCADE',
 });
 
 module.exports = RefreshToken;

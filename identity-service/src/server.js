@@ -8,7 +8,7 @@ const cors = require('cors');
 const { RateLimiterRedis } = require('rate-limiter-flexible');
 const Redis = require('ioredis');
 const rateLimit = require('express-rate-limit');
-const RedisStore = require('rate-limit-redis');
+const {RedisStore} = require('rate-limit-redis');
 
 const routes = require('./routes/identity-service');
 const errorHandler = require('./middleware/errorHandler');

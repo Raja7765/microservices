@@ -62,12 +62,5 @@ const registerUser = async (req, res) => {
 module.exports = { registerUser };
 
 
-//user login
 
-
-//refresh token
-
-
-
-//logout
 

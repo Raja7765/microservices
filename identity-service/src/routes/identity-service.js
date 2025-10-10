@@ -1,11 +1,14 @@
 const express = require('express');
-const {resgisterUser} = require('../controllers/identity-controller')
+const { registerUser } = require('../controllers/identity-controller'); // adjust if needed
 
 const router = express.Router();
 
+// POST /api/auth/register
+router.post('/register', registerUser);
 
-
-
-router.post('/register',resgisterUser)
+// (optional test route)
+router.get('/', (req, res) => {
+  res.json({ message: 'Identity service running 🚀' });
+});
 
 module.exports = router;
