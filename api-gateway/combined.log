@@ -1,0 +1,9 @@
+{"level":"info","message":"API Gateway running on port 3000","service":"api-gateway","timestamp":"2025-10-13T07:00:16.224Z"}
+{"level":"info","message":"Proxying /v1/auth -> http://localhost:3001/api/auth","service":"api-gateway","timestamp":"2025-10-13T07:00:16.227Z"}
+{"level":"info","message":"Redis client ready","service":"api-gateway","timestamp":"2025-10-13T07:00:16.283Z"}
+{"level":"info","message":"API Gateway running on port 3000","service":"api-gateway","timestamp":"2025-10-13T07:04:55.262Z"}
+{"level":"info","message":"Proxying /v1/auth -> http://localhost:3001/api/auth","service":"api-gateway","timestamp":"2025-10-13T07:04:55.266Z"}
+{"level":"info","message":"Redis client ready","service":"api-gateway","timestamp":"2025-10-13T07:04:55.283Z"}
+{"level":"info","message":"Received POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T07:14:59.915Z"}
+{"level":"debug","message":"Request body: {\"username\":\"sarvesh\",\"email\":\"sarvesh@example.com\",\"password\":\"sarvesh123\"}","service":"api-gateway","timestamp":"2025-10-13T07:14:59.919Z"}
+{"level":"info","message":"Identity service responded 201 for POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T07:15:00.466Z"}
