@@ -7,3 +7,24 @@
 {"level":"info","message":"Received POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T07:14:59.915Z"}
 {"level":"debug","message":"Request body: {\"username\":\"sarvesh\",\"email\":\"sarvesh@example.com\",\"password\":\"sarvesh123\"}","service":"api-gateway","timestamp":"2025-10-13T07:14:59.919Z"}
 {"level":"info","message":"Identity service responded 201 for POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T07:15:00.466Z"}
+{"level":"info","message":"API Gateway running on port 3000","service":"api-gateway","timestamp":"2025-10-13T10:33:38.578Z"}
+{"level":"info","message":"Proxying /v1/auth -> http://localhost:3001/api/auth","service":"api-gateway","timestamp":"2025-10-13T10:33:38.581Z"}
+{"level":"info","message":"Redis client ready","service":"api-gateway","timestamp":"2025-10-13T10:33:38.595Z"}
+{"level":"info","message":"Received POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T10:38:55.234Z"}
+{"level":"debug","message":"Request body: {\"username\":\"sarvesh\",\"email\":\"sarvesh@example.com\",\"password\":\"sarvesh123\"}","service":"api-gateway","timestamp":"2025-10-13T10:38:55.236Z"}
+{"level":"info","message":"Identity service responded 400 for POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T10:38:55.637Z"}
+{"level":"info","message":"API Gateway running on port 3000","service":"api-gateway","timestamp":"2025-10-13T10:47:58.966Z"}
+{"level":"info","message":"Proxying /v1/auth -> http://localhost:3001/api/auth","service":"api-gateway","timestamp":"2025-10-13T10:47:58.970Z"}
+{"level":"info","message":"Redis client ready","service":"api-gateway","timestamp":"2025-10-13T10:47:58.989Z"}
+{"level":"info","message":"Received POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T10:48:12.145Z"}
+{"level":"debug","message":"Request body: {\"username\":\"sarvesh\",\"email\":\"sarvesh@example.com\",\"password\":\"sarvesh123\"}","service":"api-gateway","timestamp":"2025-10-13T10:48:12.146Z"}
+{"level":"info","message":"Identity service responded 400 for POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T10:48:12.493Z"}
+{"level":"info","message":"Received POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T10:53:22.175Z"}
+{"level":"debug","message":"Request body: {\"username\":\"emman\",\"email\":\"emman@example.com\",\"password\":\"emman123\"}","service":"api-gateway","timestamp":"2025-10-13T10:53:22.177Z"}
+{"level":"info","message":"Identity service responded 429 for POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T10:53:22.194Z"}
+{"level":"info","message":"Received POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T10:54:02.535Z"}
+{"level":"debug","message":"Request body: {\"username\":\"emman\",\"email\":\"emman@example.com\",\"password\":\"emman123\"}","service":"api-gateway","timestamp":"2025-10-13T10:54:02.536Z"}
+{"level":"info","message":"Identity service responded 201 for POST /v1/auth/register","service":"api-gateway","timestamp":"2025-10-13T10:54:03.457Z"}
+{"level":"info","message":"API Gateway running on port 3000","service":"api-gateway","timestamp":"2025-10-13T10:58:33.463Z"}
+{"level":"info","message":"Proxying /v1/auth -> http://localhost:3001/api/auth","service":"api-gateway","timestamp":"2025-10-13T10:58:33.466Z"}
+{"level":"info","message":"Redis client ready","service":"api-gateway","timestamp":"2025-10-13T10:58:33.480Z"}
