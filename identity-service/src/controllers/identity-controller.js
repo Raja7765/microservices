@@ -1,90 +1,171 @@
 // src/controllers/identity-controller.js
 const { Op } = require('sequelize');
 const User = require('../models/User');
-const generateToken = require('../utils/generateToken'); // ensure this file exists at src/utils/generateToken.js
+const generateToken = require('../utils/generateToken'); // Ensure this file exists
 const logger = require('../utils/logger');
-const { validateRegistration } = require('../utils/validation');
+const { validateRegistration, validatelogin } = require('../utils/validation');
 
+
+// =======================
+// USER REGISTRATION
+// =======================
 const registerUser = async (req, res) => {
   logger.info('Registration endpoint hit...');
 
   try {
-    // 1) Validate input
+    // 1️⃣ Validate input
     const { error } = validateRegistration(req.body);
     if (error) {
       logger.warn('Validation error', error.details[0].message);
-      return res.status(400).json({ success: false, message: error.details[0].message });
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message,
+      });
     }
 
     const { email, password, username } = req.body;
 
-    // 2) Check if user exists
-    const existing = await User.findOne({
-      where: { [Op.or]: [{ email }, { username }] }
+    // 2️⃣ Check if user already exists
+    const existingUser = await User.findOne({
+      where: { [Op.or]: [{ email }, { username }] },
     });
 
-    if (existing) {
+    if (existingUser) {
       logger.warn('User already exists', { email, username });
-      return res.status(400).json({ success: false, message: 'User already exists' });
+      return res.status(400).json({
+        success: false,
+        message: 'User already exists',
+      });
     }
 
-    // 3) Create user
+    // 3️⃣ Create new user
     const user = await User.create({ username, email, password });
-    logger.info('User created', { userId: user.id });
+    logger.info('User created successfully', { userId: user.id });
 
-    // 4) Optional: allow skipping token generation while debugging
+    // 4️⃣ (Optional) Skip token generation while debugging
     if (process.env.SKIP_TOKEN === 'true') {
       return res.status(201).json({
         success: true,
         message: 'User registered (tokens skipped)',
-        user: { id: user.id, username: user.username, email: user.email }
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
       });
     }
 
-    // 5) Generate tokens — protect this step so token errors don't delete the user or mask the root error
+    // 5️⃣ Generate tokens
     try {
       const { accessToken, refreshToken } = await generateToken(user);
       return res.status(201).json({
         success: true,
         message: 'User registered successfully',
         accessToken,
-        refreshToken
+        refreshToken,
       });
     } catch (tokenErr) {
-      // If token creation fails, log it and still return success for user creation,
-      // so you can debug generateToken separately without losing created users.
       logger.error('Token generation failed after user creation', {
         message: tokenErr.message,
         stack: tokenErr.stack,
-        userId: user.id
+        userId: user.id,
       });
 
-      // Return created user info and token error note (without leaking sensitive stack in production)
       const isDev = process.env.NODE_ENV !== 'production';
       return res.status(201).json({
         success: true,
         message: 'User created but token generation failed',
-        user: { id: user.id, username: user.username, email: user.email },
-        tokenError: isDev ? tokenErr.message : 'Token generation error'
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
+        tokenError: isDev ? tokenErr.message : 'Token generation error',
       });
     }
   } catch (e) {
-    // Full structured server-side logging
+    // Log the structured error
     logger.error('Registration error occurred', {
-      message: e && e.message,
-      name: e && e.name,
-      stack: e && e.stack,
-      extra: e && e.errors ? e.errors : null
+      message: e.message,
+      stack: e.stack,
+      name: e.name,
+      extra: e.errors ? e.errors : null,
     });
 
-    // Return helpful error in development only
     const isDev = process.env.NODE_ENV !== 'production';
     return res.status(500).json({
       success: false,
-      message: isDev ? (e.message || 'Internal server error') : 'Internal server error',
-      ...(isDev ? { stack: e.stack } : {})
+      message: isDev ? e.message : 'Internal server error',
+      ...(isDev ? { stack: e.stack } : {}),
     });
   }
 };
 
-module.exports = { registerUser };
+
+// =======================
+// USER LOGIN
+// =======================
+const loginUser = async (req, res) => {
+  logger.info('Login endpoint hit...');
+
+  try {
+    // 1️⃣ Validate login input
+    const { error } = validatelogin(req.body);
+    if (error) {
+      logger.warn('Validation error', error.details[0].message);
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message,
+      });
+    }
+
+    const { email, password } = req.body;
+
+    // 2️⃣ Find user by email (Sequelize way)
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      logger.warn('Invalid user email', { email });
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid credentials',
+      });
+    }
+
+    // 3️⃣ Validate password
+    const isValidPassword = await user.comparePassword(password);
+    if (!isValidPassword) {
+      logger.warn('Invalid password for user', { userId: user.id });
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid password',
+      });
+    }
+
+    // 4️⃣ Generate tokens
+    const { accessToken, refreshToken } = await generateToken(user);
+
+    return res.json({
+      success: true,
+      message: 'Login successful',
+      accessToken,
+      refreshToken,
+      userId: user.id,
+    });
+
+  } catch (e) {
+    logger.error('Login error occurred', {
+      message: e.message,
+      stack: e.stack,
+      name: e.name,
+    });
+
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
+
+module.exports = { registerUser, loginUser };
