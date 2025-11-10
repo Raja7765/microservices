@@ -8,32 +8,32 @@ const cors = require('cors');
 const { RateLimiterRedis } = require('rate-limiter-flexible');
 const Redis = require('ioredis');
 const rateLimit = require('express-rate-limit');
-const {RedisStore} = require('rate-limit-redis');
+const { RedisStore } = require('rate-limit-redis');
 
-const routes = require('./routes/identity-service');
+const routes = require('./routes/identity-service'); // ensure this path/name is correct
 const errorHandler = require('./middleware/errorHandler');
 
-// Sequelize instance you created
-const sequelize = require('./config/db'); // <-- uses src/config/db.js that you created
+// Sequelize instance
+const sequelize = require('./config/db');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Initialize Sequelize connection & sync models
-(async () => {
-  try {
-    await sequelize.authenticate();
-    logger.info('Sequelize authenticated with Postgres');
+// middleware (keep json parsing early)
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
 
-    // In development you may want to auto-sync models. Use with caution in production.
-    if (process.env.NODE_ENV !== 'production') {
-      await sequelize.sync({ alter: true });
-      logger.info('Sequelize models synced (alter:true)');
-    }
-  } catch (e) {
-    logger.error('Sequelize connection or sync error', e);
+// simple request logger middleware
+app.use((req, res, next) => {
+  logger.info(`Received ${req.method} request to ${req.url}`);
+  try {
+    logger.debug(`Request body: ${JSON.stringify(req.body)}`);
+  } catch {
+    logger.debug('Request body: <unserializable>');
   }
-})();
+  next();
+});
 
 // Redis client (used by rate limiters etc.)
 const redisClient = process.env.REDIS_URL
@@ -50,22 +50,6 @@ redisClient.on('error', (err) => {
 redisClient.on('connect', () => logger.info('Redis client connecting...'));
 redisClient.on('ready', () => logger.info('Redis client ready'));
 
-// middleware
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
-
-// simple request logger middleware
-app.use((req, res, next) => {
-  logger.info(`Received ${req.method} request to ${req.url}`);
-  try {
-    logger.info(`Request body: ${JSON.stringify(req.body)}`);
-  } catch {
-    logger.info('Request body: <unserializable>');
-  }
-  next();
-});
-
 // ---- DDoS protection and global rate limiting using rate-limiter-flexible ----
 const rateLimiter = new RateLimiterRedis({
   storeClient: redisClient,
@@ -74,18 +58,20 @@ const rateLimiter = new RateLimiterRedis({
   duration: 1,  // per second
 });
 
-app.use((req, res, next) => {
-  rateLimiter.consume(req.ip)
-    .then(() => next())
-    .catch(() => {
-      logger.warn(`Rate limit exceeded for IP: ${req.ip}`);
-      res.status(429).json({ success: false, message: 'Too many requests' });
-    });
+// safer consume wrapper
+app.use(async (req, res, next) => {
+  try {
+    await rateLimiter.consume(req.ip);
+    return next();
+  } catch (rejRes) {
+    logger.warn(`Rate limit exceeded for IP: ${req.ip}`);
+    return res.status(429).json({ success: false, message: 'Too many requests' });
+  }
 });
 
 // ---- IP-based rate limiting for a sensitive endpoint using express-rate-limit + Redis store ----
 const sensitiveEndpointsLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,   // 15 minutes
+  windowMs: 15 * 60 * 1000, // 15 minutes
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
@@ -98,18 +84,20 @@ const sensitiveEndpointsLimiter = rateLimit({
   }),
 });
 
-// Apply sensitive limiter to register route
+// Apply sensitive limiter to register route (only)
 app.use('/api/auth/register', sensitiveEndpointsLimiter);
 
-// Routes
+// Mount routes - make sure your routes file exports an Express router
 app.use('/api/auth', routes);
 
-// Health endpoint: checks Sequelize connection + Redis
+// debug ping
+app.get('/__ping', (req, res) => res.json({ ok: true, now: new Date().toISOString() }));
+
+// Health endpoint (DB + Redis)
 app.get('/health', async (req, res) => {
   const status = { app: 'ok' };
 
   try {
-    // simple DB check
     await sequelize.authenticate();
     status.postgres = 'ok';
   } catch (e) {
@@ -127,18 +115,60 @@ app.get('/health', async (req, res) => {
   res.status(ok ? 200 : 500).json(status);
 });
 
-// Error handler (must have (err, req, res, next))
+// Error handler
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  logger.info(`Identity service running on port ${PORT}`);
-});
+// Start server after DB connect & sync
+(async () => {
+  try {
+    await sequelize.authenticate();
+    logger.info('Sequelize authenticated with Postgres');
 
-// Unhandled promise rejection logging
+    if (process.env.NODE_ENV !== 'production') {
+      await sequelize.sync({ alter: true });
+      logger.info('Sequelize models synced (alter:true)');
+    }
+
+    const server = app.listen(PORT, () => {
+      logger.info(`Identity service running on port ${PORT}`);
+    });
+
+    // debug: print registered routes (useful for catching mount path issues)
+    if (app._router && app._router.stack) {
+      logger.info('Registered routes:');
+      app._router.stack.forEach((layer) => {
+        if (layer.route && layer.route.path) {
+          const methods = Object.keys(layer.route.methods).map(m => m.toUpperCase()).join(',');
+          logger.info(`  ${methods} ${layer.route.path}`);
+        } else if (layer.name === 'router' && layer.regexp) {
+          logger.debug(`  router regexp: ${layer.regexp}`);
+        }
+      });
+    }
+
+    // handle graceful shutdown signals if desired
+    process.on('SIGTERM', () => {
+      logger.info('SIGTERM received, shutting down gracefully');
+      server.close(() => {
+        logger.info('Server closed');
+        process.exit(0);
+      });
+    });
+
+  } catch (e) {
+    logger.error('Sequelize connection or sync error', e);
+    process.exit(1);
+  }
+})();
+
+// unhandled errors
 process.on('unhandledRejection', (reason, promise) => {
   logger.error('Unhandled Rejection at', { promise, reason });
 });
+process.on('uncaughtException', (err) => {
+  logger.error('Uncaught Exception', { message: err.message, stack: err.stack });
+  process.exit(1); // optionally restart via process manager
+});
 
-// Export sequelize and redis client for other modules that might need them
+// Export for tests / other modules
 module.exports = { app, sequelize, redisClient };
