@@ -1,19 +1,22 @@
 // src/controllers/identity-controller.js
 const { Op } = require('sequelize');
 const User = require('../models/User');
-const generateToken = require('../utils/generateToken'); // Ensure this file exists
+const RefreshToken = require('../models/RefreshToken');
+const generateToken = require('../utils/generateToken');
 const logger = require('../utils/logger');
 const { validateRegistration, validatelogin } = require('../utils/validation');
-
 
 // =======================
 // USER REGISTRATION
 // =======================
 const registerUser = async (req, res) => {
   logger.info('Registration endpoint hit...');
+  // small debug: log body presence (avoids big dumps in prod)
+  try {
+    logger.debug('Registration body present:', { hasBody: !!req.body, keys: Object.keys(req.body || {}) });
+  } catch {}
 
   try {
-    // 1️⃣ Validate input
     const { error } = validateRegistration(req.body);
     if (error) {
       logger.warn('Validation error', error.details[0].message);
@@ -25,7 +28,6 @@ const registerUser = async (req, res) => {
 
     const { email, password, username } = req.body;
 
-    // 2️⃣ Check if user already exists
     const existingUser = await User.findOne({
       where: { [Op.or]: [{ email }, { username }] },
     });
@@ -38,53 +40,19 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // 3️⃣ Create new user
     const user = await User.create({ username, email, password });
     logger.info('User created successfully', { userId: user.id });
 
-    // 4️⃣ (Optional) Skip token generation while debugging
-    if (process.env.SKIP_TOKEN === 'true') {
-      return res.status(201).json({
-        success: true,
-        message: 'User registered (tokens skipped)',
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-        },
-      });
-    }
+    // generate tokens (no SKIP_TOKEN required)
+    const { accessToken, refreshToken } = await generateToken(user);
+    return res.status(201).json({
+      success: true,
+      message: 'User registered successfully',
+      accessToken,
+      refreshToken,
+    });
 
-    // 5️⃣ Generate tokens
-    try {
-      const { accessToken, refreshToken } = await generateToken(user);
-      return res.status(201).json({
-        success: true,
-        message: 'User registered successfully',
-        accessToken,
-        refreshToken,
-      });
-    } catch (tokenErr) {
-      logger.error('Token generation failed after user creation', {
-        message: tokenErr.message,
-        stack: tokenErr.stack,
-        userId: user.id,
-      });
-
-      const isDev = process.env.NODE_ENV !== 'production';
-      return res.status(201).json({
-        success: true,
-        message: 'User created but token generation failed',
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-        },
-        tokenError: isDev ? tokenErr.message : 'Token generation error',
-      });
-    }
   } catch (e) {
-    // Log the structured error
     logger.error('Registration error occurred', {
       message: e.message,
       stack: e.stack,
@@ -102,14 +70,14 @@ const registerUser = async (req, res) => {
 };
 
 
+
 // =======================
-// USER LOGIN
+// USER LOGIN + REFRESH TOKEN CLEANUP
 // =======================
 const loginUser = async (req, res) => {
   logger.info('Login endpoint hit...');
 
   try {
-    // 1️⃣ Validate login input
     const { error } = validatelogin(req.body);
     if (error) {
       logger.warn('Validation error', error.details[0].message);
@@ -121,7 +89,6 @@ const loginUser = async (req, res) => {
 
     const { email, password } = req.body;
 
-    // 2️⃣ Find user by email (Sequelize way)
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -132,7 +99,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // 3️⃣ Validate password
     const isValidPassword = await user.comparePassword(password);
     if (!isValidPassword) {
       logger.warn('Invalid password for user', { userId: user.id });
@@ -142,7 +108,11 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // 4️⃣ Generate tokens
+    // ✅ Delete old refresh tokens before creating a new one
+    await RefreshToken.destroy({ where: { userId: user.id } });
+    logger.info('Old refresh tokens deleted for user', { userId: user.id });
+
+    // ✅ Generate new tokens
     const { accessToken, refreshToken } = await generateToken(user);
 
     return res.json({
@@ -168,4 +138,56 @@ const loginUser = async (req, res) => {
 };
 
 
-module.exports = { registerUser, loginUser };
+// =======================
+// USER LOGOUT
+// =======================
+const logoutUser = async (req, res) => {
+  logger.info('Logout endpoint hit...');
+
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({
+        success: false,
+        message: 'Refresh token is required for logout',
+      });
+    }
+
+    // ✅ Check if token exists
+    const tokenRecord = await RefreshToken.findOne({ where: { token: refreshToken } });
+
+    if (!tokenRecord) {
+      logger.warn('Invalid or already logged-out token');
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid refresh token or already logged out',
+      });
+    }
+
+    // ✅ Delete that refresh token (logout for that device/session)
+    await RefreshToken.destroy({ where: { token: refreshToken } });
+
+    logger.info('User logged out successfully', { userId: tokenRecord.userId });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Logged out successfully',
+    });
+
+  } catch (e) {
+    logger.error('Logout error occurred', {
+      message: e.message,
+      stack: e.stack,
+      name: e.name,
+    });
+
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
+
+module.exports = { registerUser, loginUser, logoutUser };

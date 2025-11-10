@@ -1299,3 +1299,61 @@
 {"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-10-13T10:58:40.721Z"}
 {"level":"info","message":"Request body: {\"email\":\"emman@example.com\",\"password\":\"emman123\"}","service":"identity-service","timestamp":"2025-10-13T10:58:40.721Z"}
 {"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-10-13T10:58:40.724Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-10-13T11:03:55.264Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-10-13T11:03:55.276Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-10-13T11:03:55.292Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-10-13T11:03:55.552Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-10-13T11:03:56.361Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-10-13T11:06:58.056Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-10-13T11:06:58.067Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-10-13T11:06:58.074Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-10-13T11:06:58.361Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-10-13T11:06:59.174Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-10-13T12:44:44.572Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-10-13T12:44:44.595Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-10-13T12:44:44.625Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-10-13T12:44:44.881Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-10-13T12:44:46.464Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-10-13T12:54:13.348Z"}
+{"level":"info","message":"Request body: {\"email\":\"emman@example.com\",\"password\":\"emman123\"}","service":"identity-service","timestamp":"2025-10-13T12:54:13.368Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-10-13T12:54:13.500Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-10-13T12:54:14.833Z","userId":3}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-10-13T13:30:31.018Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-10-13T13:30:31.044Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-10-13T13:30:31.055Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-10-13T13:30:31.291Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-10-13T13:30:32.210Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-10-13T13:31:34.394Z"}
+{"level":"info","message":"Request body: {\"email\":\"emman@example.com\",\"password\":\"emman123\"}","service":"identity-service","timestamp":"2025-10-13T13:31:34.395Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-10-13T13:31:34.408Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-10-13T13:31:34.973Z","userId":3}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-10-15T05:14:56.888Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-10-15T05:14:56.902Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-10-15T05:14:56.912Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-10-15T05:14:57.079Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-10-15T05:14:57.858Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-10-17T04:58:35.568Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-10-17T04:58:35.617Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-10-17T04:58:35.636Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-10-17T04:58:35.899Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-10-17T04:58:37.264Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-10-17T04:58:45.804Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-10-17T04:58:45.843Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-10-17T04:58:45.853Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-10-17T04:58:46.025Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-10-17T04:58:47.253Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-10-17T04:58:49.949Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-10-17T04:58:49.973Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-10-17T04:58:49.985Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-10-17T04:58:50.200Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-10-17T04:58:51.318Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-10-27T05:33:32.674Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-10-27T05:33:32.690Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-10-27T05:33:32.706Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-10-27T05:33:32.911Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-10-27T05:33:34.257Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-10T07:25:26.750Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-10T07:25:26.762Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-10T07:25:26.802Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-10T07:25:27.092Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-10T07:25:28.387Z"}
