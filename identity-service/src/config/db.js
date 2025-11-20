@@ -2,36 +2,21 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const useDatabaseUrl = !!process.env.DATABASE_URL;
-
 let sequelize;
-
-if (useDatabaseUrl) {
-  sequelize = new Sequelize(process.env.DATABASE_URL, {
+sequelize = new Sequelize(
+  process.env.PG_DATABASE || 'api_service_db', // Default to a specific name if not set
+  process.env.PG_USER || 'postgres',          // Default user
+  process.env.PG_PASSWORD || '',              // Default password
+  {
+    host: process.env.PG_HOST || 'localhost',
+    port: process.env.PG_PORT ? Number(process.env.PG_PORT) : 5432,
     dialect: 'postgres',
-    protocol: 'postgres',
     logging: false,
-    dialectOptions: {
-      ssl: process.env.PG_SSL === 'true' || true, // safety: Render DB usually requires SSL
-      rejectUnauthorized: false,
-    },
-  });
-} else {
-  // build from PG_ envs (for local dev)
-  sequelize = new Sequelize(
-    process.env.PG_DATABASE || 'postgres',
-    process.env.PG_USER || 'postgres',
-    process.env.PG_PASSWORD || '',
-    {
-      host: process.env.PG_HOST || 'localhost',
-      port: process.env.PG_PORT ? Number(process.env.PG_PORT) : 5432,
-      dialect: 'postgres',
-      logging: false,
-      dialectOptions: (process.env.PG_SSL === 'true')
-        ? { ssl: { require: true, rejectUnauthorized: false } }
-        : {},
-    }
-  );
-}
+    // Configuration for local SSL, based on your .env file PG_SSL=false
+    dialectOptions: (process.env.PG_SSL === 'true')
+      ? { ssl: { require: true, rejectUnauthorized: false } }
+      : {}, // Empty object for no SSL/local setup
+  }
+);
 
 module.exports = sequelize;
