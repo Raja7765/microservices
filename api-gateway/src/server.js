@@ -1,108 +1,79 @@
-require('dotenv').config();
+// api-gateway/src/server.js
+
 const express = require('express');
-const Redis = require('ioredis');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');           // correct import
-const { RedisStore } = require('rate-limit-redis');        // correct import
-const logger = require('./utils/logger');
-const proxy = require('express-http-proxy');
-const cors = require('cors');
-const errorHandler = require('./middleware/errorhandler');
+require('dotenv').config();
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const authMiddleware = require('./middleware/authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const IDENTITY_SERVICE_URL = process.env.IDENTITY_SERVICE_URL || 'http://localhost:3001';
-const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
-// Redis client
-const redisClient = new Redis(REDIS_URL);
-redisClient.on('error', (err) => logger.error('Redis error', err));
-redisClient.on('ready', () => logger.info('Redis client ready'));
+// Get service URLs
+const IDENTITY_API_URL = process.env.IDENTITY_API_URL;
+const POST_API_URL = process.env.POST_API_URL;
+const MEDIA_API_URL = process.env.MEDIA_API_URL;
 
-// Middleware
-app.use(helmet());
-app.use(cors());
+// Middleware Setup
 app.use(express.json());
 
-// Rate limiting (global example)
-const ratelimit = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  handler: (req, res) => {
-    logger.warn(`Rate limit exceeded for IP: ${req.ip}`);
-    res.status(429).json({ success: false, message: 'Too many requests' });
-  },
-  store: new RedisStore({
-    // ioredis uses .call to execute commands with rate-limit-redis
-    sendCommand: (...args) => redisClient.call(...args),
-    prefix: 'rl:',
-  }),
-});
-app.use(ratelimit);
+// Apply global authentication middleware BEFORE routing
+app.use(authMiddleware);
 
-// request logging
-app.use((req, res, next) => {
-  logger.info(`Received ${req.method} ${req.originalUrl}`);
-  // avoid logging large bodies by default; log presence only
-  try {
-    logger.debug(`Request body: ${JSON.stringify(req.body)}`);
-  } catch {
-    logger.debug('Request body: <unserializable>');
-  }
-  next();
-});
+// =======================================================
+// PROXY SETUP
+// =======================================================
 
-// Proxy /v1/auth/*  -->  IDENTITY_SERVICE_URL + /api/auth/*
-app.use(
-  '/v1/auth',
-  proxy(IDENTITY_SERVICE_URL, {
-    proxyReqPathResolver: (req) => {
-      // Forward path: replace /v1/auth with /api/auth
-      // e.g. /v1/auth/register  -> /api/auth/register
-      const newPath = req.originalUrl.replace(/^\/v1\/auth/, '/api/auth');
-      return newPath;
+// 1. IDENTITY SERVICE Proxy
+// Routes /api/auth traffic to the Identity Service (e.g., login, register)
+app.use('/api/auth', createProxyMiddleware({ 
+    target: IDENTITY_API_URL, 
+    changeOrigin: true,
+    pathRewrite: { '^/api/auth': '' }, // Remove /api/auth from path before forwarding
+    onProxyReq: (proxyReq, req, res) => {
+        // Log the request to the target
+        console.log(`[Proxy] Forwarding AUTH request to: ${proxyReq.path}`);
     },
-    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
-      // ensure upstream sees JSON
-      proxyReqOpts.headers['Content-Type'] = 'application/json';
-      // optionally forward request id or other headers
-      if (srcReq.headers['x-request-id']) {
-        proxyReqOpts.headers['x-request-id'] = srcReq.headers['x-request-id'];
-      }
-      return proxyReqOpts;
-    },
-    userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
-      logger.info(`Identity service responded ${proxyRes.statusCode} for ${userReq.method} ${userReq.originalUrl}`);
-      // proxyResData is a Buffer — return it unchanged (string or buffer)
-      return proxyResData;
-    },
-    proxyErrorHandler: (err, res, next) => {
-      logger.error(`Proxy error: ${err && err.message}`);
-      res.status(502).json({ success: false, message: 'Bad Gateway', error: err && err.message });
-    }
-  })
-);
+}));
 
-// Optional: other proxy routes go here (protected routes)...
-// e.g. app.use('/v1/orders', verifyJwtRequired, proxy(OTHER_URL, { ... }))
+// 2. POST SERVICE Proxy
+// Routes /api/posts traffic to the Post Service
+app.use('/api/posts', createProxyMiddleware({ 
+    target: POST_API_URL, 
+    changeOrigin: true,
+    pathRewrite: { '^/api/posts': '' }, // Remove /api/posts from path
+    onProxyReq: (proxyReq, req, res) => {
+        // Forward the x-user-id header set by authMiddleware
+        if (req.headers['x-user-id']) {
+            proxyReq.setHeader('x-user-id', req.headers['x-user-id']);
+        }
+        console.log(`[Proxy] Forwarding POSTS request to: ${proxyReq.path}`);
+    },
+}));
 
-// health
+// 3. MEDIA SERVICE Proxy
+// Routes /api/media traffic to the Media Service (e.g., file upload)
+app.use('/api/media', createProxyMiddleware({ 
+    target: MEDIA_API_URL, 
+    changeOrigin: true,
+    pathRewrite: { '^/api/media': '' }, // Remove /api/media from path
+    onProxyReq: (proxyReq, req, res) => {
+        // Forward the x-user-id header
+        if (req.headers['x-user-id']) {
+            proxyReq.setHeader('x-user-id', req.headers['x-user-id']);
+        }
+        console.log(`[Proxy] Forwarding MEDIA request to: ${proxyReq.path}`);
+    },
+}));
+
+
+// Global Health Check
 app.get('/health', (req, res) => {
-  res.json({
-    service: 'api-gateway',
-    env: process.env.NODE_ENV || 'development',
-    redis: redisClient.status || 'unknown',
-    identity: IDENTITY_SERVICE_URL,
-  });
+    res.status(200).json({ status: 'OK', service: 'API Gateway' });
 });
 
-// error handler
-app.use(errorHandler);
 
-// start server
+// Start the server
 app.listen(PORT, () => {
-  logger.info(`API Gateway running on port ${PORT}`);
-  logger.info(`Proxying /v1/auth -> ${IDENTITY_SERVICE_URL}/api/auth`);
+    console.log(`🚀 API Gateway running on http://localhost:${PORT}`);
+    console.log(`All services are now accessible via port ${PORT}`);
 });
