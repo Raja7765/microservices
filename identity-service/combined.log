@@ -1551,3 +1551,150 @@
 {"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-20T14:12:14.464Z"}
 {"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-20T14:12:17.120Z"}
 {"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-20T14:12:17.126Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-20T15:27:03.174Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-20T15:27:03.211Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-20T15:27:03.399Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-20T15:27:04.456Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-20T15:27:04.459Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-20T15:27:11.215Z"}
+{"level":"debug","message":"Request body: {\"email\":\"sangar@example.com\",\"password\":\"123475\"}","service":"identity-service","timestamp":"2025-11-20T15:27:11.216Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-20T15:27:11.258Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-20T15:27:11.418Z","userId":4}
+{"level":"info","message":"Received GET request to /__ping","service":"identity-service","timestamp":"2025-11-21T05:57:57.106Z"}
+{"level":"debug","message":"Request body: undefined","service":"identity-service","timestamp":"2025-11-21T05:57:57.119Z"}
+{"level":"info","message":"Received GET request to /__ping","service":"identity-service","timestamp":"2025-11-21T05:58:09.199Z"}
+{"level":"debug","message":"Request body: undefined","service":"identity-service","timestamp":"2025-11-21T05:58:09.200Z"}
+{"level":"info","message":"Received POST request to /api/auth/register","service":"identity-service","timestamp":"2025-11-21T06:01:16.868Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Raja\",\"email\":\"Raja@example.com\",\"password\":\"1234789\"}","service":"identity-service","timestamp":"2025-11-21T06:01:16.874Z"}
+{"level":"info","message":"Registration endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:01:16.935Z"}
+{"keys":["username","email","password"],"level":"debug","message":"Registration body keys:","service":"identity-service","timestamp":"2025-11-21T06:01:16.935Z"}
+{"email":"raja@example.com","level":"warn","message":"User already exists","service":"identity-service","timestamp":"2025-11-21T06:01:17.350Z","username":"Raja"}
+{"level":"info","message":"Received POST request to /api/auth/register","service":"identity-service","timestamp":"2025-11-21T06:02:25.738Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Suresh\",\"email\":\"Suresh@example.com\",\"password\":\"1234789\"}","service":"identity-service","timestamp":"2025-11-21T06:02:25.739Z"}
+{"level":"info","message":"Registration endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:02:25.762Z"}
+{"keys":["username","email","password"],"level":"debug","message":"Registration body keys:","service":"identity-service","timestamp":"2025-11-21T06:02:25.762Z"}
+{"level":"info","message":"User created successfully","service":"identity-service","timestamp":"2025-11-21T06:02:26.457Z","userId":5}
+{"level":"info","message":"Received POST request to /api/auth/register","service":"identity-service","timestamp":"2025-11-21T06:03:12.854Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Suresh\",\"email\":\"Suresh@example.com\",\"password\":\"1234789\"}","service":"identity-service","timestamp":"2025-11-21T06:03:12.855Z"}
+{"level":"info","message":"Registration endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:03:12.861Z"}
+{"keys":["username","email","password"],"level":"debug","message":"Registration body keys:","service":"identity-service","timestamp":"2025-11-21T06:03:12.861Z"}
+{"email":"suresh@example.com","level":"warn","message":"User already exists","service":"identity-service","timestamp":"2025-11-21T06:03:13.148Z","username":"Suresh"}
+{"level":"info","message":"Received POST request to /v1/auth/login","service":"identity-service","timestamp":"2025-11-21T06:05:27.205Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Suresh\",\"email\":\"Suresh@example.com\",\"password\":\"1234789\"}","service":"identity-service","timestamp":"2025-11-21T06:05:27.207Z"}
+{"level":"info","message":"Received PUT request to /v1/auth/login","service":"identity-service","timestamp":"2025-11-21T06:05:43.297Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Suresh\",\"email\":\"Suresh@example.com\",\"password\":\"1234789\"}","service":"identity-service","timestamp":"2025-11-21T06:05:43.298Z"}
+{"level":"info","message":"Received GET request to /v1/auth/login","service":"identity-service","timestamp":"2025-11-21T06:05:48.089Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Suresh\",\"email\":\"Suresh@example.com\",\"password\":\"1234789\"}","service":"identity-service","timestamp":"2025-11-21T06:05:48.089Z"}
+{"level":"info","message":"Received GET request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:06:08.084Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Suresh\",\"email\":\"Suresh@example.com\",\"password\":\"1234789\"}","service":"identity-service","timestamp":"2025-11-21T06:06:08.085Z"}
+{"level":"info","message":"Received GET request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:06:17.961Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Suresh\",\"email\":\"Suresh@example.com\",\"password\":\"1234789\"}","service":"identity-service","timestamp":"2025-11-21T06:06:17.962Z"}
+{"level":"info","message":"Received POST request to /api/auth/register","service":"identity-service","timestamp":"2025-11-21T06:07:53.152Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Basil\",\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:07:53.165Z"}
+{"level":"info","message":"Registration endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:07:53.207Z"}
+{"keys":["username","email","password"],"level":"debug","message":"Registration body keys:","service":"identity-service","timestamp":"2025-11-21T06:07:53.209Z"}
+{"level":"info","message":"User created successfully","service":"identity-service","timestamp":"2025-11-21T06:07:53.951Z","userId":6}
+{"level":"info","message":"Received POST request to /api/auth/refresh","service":"identity-service","timestamp":"2025-11-21T06:13:35.606Z"}
+{"level":"debug","message":"Request body: {\"refreshToken\":\"cd7153a053f851946e9189f91825a0d233ea3aaf55d7cda2339babc4cd2440a289e7a9a3aa691eba\"}","service":"identity-service","timestamp":"2025-11-21T06:13:35.610Z"}
+{"level":"info","message":"Refresh token endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:13:35.621Z"}
+{"level":"info","message":"Old refresh token removed (rotation)","service":"identity-service","timestamp":"2025-11-21T06:13:36.256Z","userId":6}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-21T06:19:39.795Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-21T06:19:39.808Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-21T06:19:39.960Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-21T06:19:40.978Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-21T06:19:40.982Z"}
+{"level":"info","message":"Received GET request to /health","service":"identity-service","timestamp":"2025-11-21T06:20:56.190Z"}
+{"level":"debug","message":"Request body: undefined","service":"identity-service","timestamp":"2025-11-21T06:20:56.199Z"}
+{"level":"info","message":"Received POST request to /api/auth/register","service":"identity-service","timestamp":"2025-11-21T06:21:03.632Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Basil\",\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:21:03.633Z"}
+{"level":"info","message":"Registration endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:21:03.646Z"}
+{"keys":["username","email","password"],"level":"debug","message":"Registration body keys:","service":"identity-service","timestamp":"2025-11-21T06:21:03.647Z"}
+{"email":"basil@example.com","level":"warn","message":"User already exists","service":"identity-service","timestamp":"2025-11-21T06:21:03.925Z","username":"Basil"}
+{"level":"info","message":"Received GET request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:21:19.860Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Basil\",\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:21:19.861Z"}
+{"level":"info","message":"Received GET request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:23:39.023Z"}
+{"level":"debug","message":"Request body: {\"username\":\"Basil\",\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:23:39.025Z"}
+{"level":"info","message":"Received GET request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:24:01.802Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:24:01.803Z"}
+{"level":"info","message":"Received GET request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:24:05.579Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:24:05.580Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:24:33.707Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:24:33.708Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:24:33.712Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T06:24:34.400Z","userId":6}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-21T06:28:35.384Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-21T06:28:35.392Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-21T06:28:35.540Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-21T06:28:36.553Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-21T06:28:36.557Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:29:33.280Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:29:33.282Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:29:33.298Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T06:29:34.024Z","userId":6}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:30:19.004Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:30:19.005Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:30:19.007Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T06:30:19.725Z","userId":6}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-21T06:35:59.151Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-21T06:35:59.168Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-21T06:35:59.337Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-21T06:36:00.483Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-21T06:36:00.488Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-21T06:36:25.749Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-21T06:36:25.756Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-21T06:36:25.973Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-21T06:36:26.691Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-21T06:36:26.693Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:36:49.503Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:36:49.504Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:36:49.515Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T06:36:50.048Z","userId":6}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-21T06:50:51.442Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-21T06:50:51.454Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-21T06:50:51.590Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-21T06:50:52.564Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-21T06:50:52.569Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T06:53:10.520Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T06:53:10.522Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T06:53:10.536Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T06:53:10.993Z","userId":6}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-21T06:58:48.064Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-21T06:58:48.075Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-21T06:58:48.189Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-21T06:58:49.319Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-21T06:58:49.323Z"}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-21T07:04:15.691Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-21T07:04:15.712Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-21T07:04:15.953Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-21T07:04:16.862Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-21T07:04:16.867Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T07:08:56.844Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T07:08:56.848Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T07:08:56.870Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T07:08:57.708Z","userId":6}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-21T07:16:35.689Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-21T07:16:35.701Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-21T07:16:35.814Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-21T07:16:36.908Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-21T07:16:36.912Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T07:17:04.552Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T07:17:04.554Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T07:17:04.567Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T07:17:05.138Z","userId":6}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T07:20:00.012Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T07:20:00.014Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T07:20:00.018Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T07:20:00.542Z","userId":6}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T07:22:58.132Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T07:22:58.134Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T07:22:58.140Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T07:22:58.698Z","userId":6}
+{"level":"info","message":"Redis client connecting...","service":"identity-service","timestamp":"2025-11-21T07:28:30.925Z"}
+{"level":"info","message":"Redis client ready","service":"identity-service","timestamp":"2025-11-21T07:28:30.933Z"}
+{"level":"info","message":"Sequelize authenticated with Postgres","service":"identity-service","timestamp":"2025-11-21T07:28:31.073Z"}
+{"level":"info","message":"Sequelize models synced (alter:true)","service":"identity-service","timestamp":"2025-11-21T07:28:31.973Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-11-21T07:28:31.977Z"}
+{"level":"info","message":"Received POST request to /api/auth/login","service":"identity-service","timestamp":"2025-11-21T07:29:27.205Z"}
+{"level":"debug","message":"Request body: {\"email\":\"Basil@example.com\",\"password\":\"789456\"}","service":"identity-service","timestamp":"2025-11-21T07:29:27.207Z"}
+{"level":"info","message":"Login endpoint hit...","service":"identity-service","timestamp":"2025-11-21T07:29:27.219Z"}
+{"level":"info","message":"Old refresh tokens deleted for user","service":"identity-service","timestamp":"2025-11-21T07:29:27.814Z","userId":6}
