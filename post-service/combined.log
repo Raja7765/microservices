@@ -42,3 +42,15 @@
 {"level":"info","message":"✅ PostgreSQL database connection established successfully.","service":"post-service","timestamp":"2025-11-21T07:28:43.339Z"}
 {"level":"info","message":"🔄 Database synchronized: 'Posts' table ready.","service":"post-service","timestamp":"2025-11-21T07:28:43.404Z"}
 {"level":"info","message":"🚀 Post Service running on http://localhost:3002","service":"post-service","timestamp":"2025-11-21T07:28:43.408Z"}
+{"level":"info","message":"✅ PostgreSQL database connection established successfully.","service":"post-service","timestamp":"2025-11-21T09:42:47.795Z"}
+{"level":"info","message":"🔄 Database synchronized: 'Posts' table ready.","service":"post-service","timestamp":"2025-11-21T09:42:47.896Z"}
+{"level":"info","message":"🚀 Post Service running on http://localhost:3002","service":"post-service","timestamp":"2025-11-21T09:42:47.899Z"}
+{"level":"info","message":"✅ PostgreSQL database connection established successfully.","service":"post-service","timestamp":"2025-11-21T10:57:18.077Z"}
+{"level":"info","message":"🔄 Database synchronized: 'Posts' table ready.","service":"post-service","timestamp":"2025-11-21T10:57:18.269Z"}
+{"level":"info","message":"🚀 Post Service running on http://localhost:3002","service":"post-service","timestamp":"2025-11-21T10:57:18.276Z"}
+{"level":"info","message":"✅ PostgreSQL database connection established successfully.","service":"post-service","timestamp":"2025-11-22T10:27:18.027Z"}
+{"level":"info","message":"🔄 Database synchronized: 'Posts' table ready.","service":"post-service","timestamp":"2025-11-22T10:27:18.169Z"}
+{"level":"info","message":"🚀 Post Service running on http://localhost:3002","service":"post-service","timestamp":"2025-11-22T10:27:18.174Z"}
+{"level":"info","message":"✅ PostgreSQL database connection established successfully.","service":"post-service","timestamp":"2025-11-22T12:09:58.624Z"}
+{"level":"info","message":"🔄 Database synchronized: 'Posts' table ready.","service":"post-service","timestamp":"2025-11-22T12:09:58.788Z"}
+{"level":"info","message":"🚀 Post Service running on http://localhost:3002","service":"post-service","timestamp":"2025-11-22T12:09:58.797Z"}
