@@ -1,14 +1,14 @@
-// media-service/src/server.js (Update)
+// media-service/src/server.js
 
 const express = require('express');
 require('dotenv').config();
-// No need for 'fs' or UPLOAD_PATH since we use Cloudinary
 
 const app = express();
 const PORT = process.env.PORT || 3003;
 
 // Import Routes
-const mediaRoutes = require('../media-service/src/routes/media-routes'); 
+// CRITICAL FIX: Updated path. Assuming server.js is in /src, the path should be './routes/media-routes'.
+const mediaRoutes = require('./routes/media-routes'); 
 
 // Middleware setup (basic)
 app.use(express.json());
