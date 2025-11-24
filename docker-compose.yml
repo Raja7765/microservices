@@ -1,0 +1,143 @@
+# microservices/docker-compose.yml
+
+version: '3.8'
+
+services:
+  # ==================================
+  # 1. DATABASE SERVICES (DB Per Service)
+  # ==================================
+  postgres-identity:
+    image: postgres:14-alpine
+    container_name: postgres-identity
+    environment:
+      # This configures the actual database instance
+      POSTGRES_DB: api_service_db          # Matches PG_DATABASE in Identity Service .env
+      POSTGRES_USER: micro                 # Matches PG_USER in Identity Service .env
+      POSTGRES_PASSWORD: 12345             # Matches PG_PASSWORD in Identity Service .env
+    volumes:
+      - identity-data:/var/lib/postgresql/data
+    restart: always
+
+  postgres-post:
+    image: postgres:14-alpine
+    container_name: postgres-post
+    environment:
+      # This configures the actual database instance
+      POSTGRES_DB: post_service_db         # Matches PG_DATABASE in Post Service .env
+      POSTGRES_USER: postgres              # Matches PG_USER in Post Service .env
+      POSTGRES_PASSWORD: 12345             # Matches PG_PASSWORD in Post Service .env
+    volumes:
+      - post-data:/var/lib/postgresql/data
+    restart: always
+
+  # ==================================
+  # 2. APPLICATION MICROSERVICES
+  # ==================================
+  
+  # A. IDENTITY SERVICE (Port 3001)
+  identity-service:
+    build:
+      context: ./identity-service/
+    container_name: identity-service
+    ports:
+      - "3001:3001"
+    environment:
+      # CRITICAL: Replaces 'localhost' with the Docker network service name
+      PG_HOST: postgres-identity 
+      PG_DATABASE: api_service_db
+      PG_USER: micro
+      PG_PASSWORD: 12345
+      PG_PORT: 5432                       # Postgres standard port (optional but good to include)
+      PG_SSL: false
+      JWT_SECRET: superSecureKeyForMyMicroservice12345!
+      REDIS_URL: redis://redis-service:6379 # Assuming you will deploy Redis as 'redis-service'
+      PORT: 3001
+    depends_on:
+      - postgres-identity
+    restart: on-failure
+
+  # B. POST SERVICE (Port 3002)
+  post-service:
+    build:
+      context: ./post-service/
+    container_name: post-service
+    ports:
+      - "3002:3002"
+    environment:
+      # CRITICAL: Replaces 'localhost' with the Docker network service name
+      PG_HOST: postgres-post
+      PG_DATABASE: post_service_db
+      PG_USER: postgres
+      PG_PASSWORD: 12345
+      PG_PORT: 5432
+      PG_SSL: false
+      JWT_SECRET: superSecureKeyForMyMicroservice12345!
+      REDIS_URL: redis://redis-service:6379
+      PORT: 3002
+    depends_on:
+      - postgres-post
+    restart: on-failure
+
+  # C. MEDIA SERVICE (Port 3003)
+  media-service:
+    build:
+      context: ./media-service/
+    container_name: media-service
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      JWT_SECRET: superSecureKeyForMyMicroservice12345!
+      CLOUDINARY_CLOUD_NAME: dkv2ufzef
+      CLOUDINARY_API_KEY: 529783458524422
+      CLOUDINARY_API_SECRET: tshEG5QIiIHwBl2qRmEVcDOMank
+    restart: on-failure
+
+  # D. SEARCH SERVICE (Port 3004)
+  search-service:
+    build:
+      context: ./search-service/
+    container_name: search-service
+    ports:
+      - "3004:3004"
+    environment:
+      PORT: 3004
+      # Add any search-specific variables here later (e.g., ELASTICSEARCH_URL)
+    restart: on-failure
+    
+  # E. API GATEWAY (Port 3000)
+  api-gateway:
+    build:
+      context: ./api-gateway/
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      JWT_SECRET: superSecureKeyForMyMicroservice12345!
+      # CRITICAL: Gateway connects to other services using their service names
+      IDENTITY_API_URL: http://identity-service:3001
+      POST_API_URL: http://post-service:3002
+      MEDIA_API_URL: http://media-service:3003
+      SEARCH_API_URL: http://search-service:3004
+    depends_on:
+      - identity-service
+      - post-service
+      - media-service
+      - search-service
+    restart: on-failure
+    
+  # F. REDIS SERVICE (Optional, but required by your .env files)
+  redis-service:
+    image: redis:alpine
+    container_name: redis-service
+    ports:
+      - "6379:6379"
+    restart: always
+
+# ==================================
+# 3. VOLUME DEFINITION
+# ==================================
+volumes:
+  identity-data:
+  post-data:
